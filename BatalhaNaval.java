@@ -27,6 +27,7 @@ public class BatalhaNaval {
         int naviosAfundados = 0;
         int totalNavios = tamanhosNavio.length;
 
+        // loop principal onde a galera tenta achar os navios em ate 30 jogadas
         while (tentativas < 30 && naviosAfundados < totalNavios) {
             mostrarEstatisticasRodada(tentativas, acertos, naviosAfundados);
             exibirTabuleiro(tabuleiroVisivel);
@@ -50,6 +51,7 @@ public class BatalhaNaval {
                 tabuleiroVisivel[linha][coluna] = 'A';
                 acertos++;
 
+                // guarda qual navio levou o tiro pra saber se afundou
                 int idNavio = idsNavios[linha][coluna];
                 celulasRestantes[idNavio]--;
                 System.out.println("ACERTOU! Um navio foi atingido!");
@@ -97,22 +99,26 @@ public class BatalhaNaval {
     private static void preencherTiposETamanhos(char[] tipos, int[] tamanhos) {
         int indice = 0;
 
+        // coloca o porta avioes na lista de navios
         tipos[indice] = 'P';
         tamanhos[indice] = 4;
         indice++;
 
+        // adiciona dois cruzadores
         for (int i = 0; i < 2; i++) {
             tipos[indice] = 'C';
             tamanhos[indice] = 3;
             indice++;
         }
 
+        // adiciona tres destroyers
         for (int i = 0; i < 3; i++) {
             tipos[indice] = 'D';
             tamanhos[indice] = 2;
             indice++;
         }
 
+        // adiciona quatro submarinos
         for (int i = 0; i < 4; i++) {
             tipos[indice] = 'S';
             tamanhos[indice] = 1;
@@ -121,6 +127,7 @@ public class BatalhaNaval {
     }
 
     private static void posicionarTodosNavios(char[][] tabuleiro, int[][] ids, char[] tipos, int[] tamanhos, Random random) {
+        // percorre cada navio e joga no tabuleiro de forma aleatoria
         for (int i = 0; i < tipos.length; i++) {
             posicionarNavio(tabuleiro, ids, i, tipos[i], tamanhos[i], random);
         }
@@ -129,6 +136,7 @@ public class BatalhaNaval {
     private static void posicionarNavio(char[][] tabuleiro, int[][] ids, int id, char tipo, int tamanho, Random random) {
         boolean colocado = false;
 
+        // tenta achar uma posicao valida ate conseguir
         while (!colocado) {
             boolean horizontal = random.nextBoolean();
             int linha = random.nextInt(8);
@@ -154,6 +162,7 @@ public class BatalhaNaval {
     }
 
     private static boolean posicaoLivre(char[][] tabuleiro, int linha, int coluna, int tamanho, boolean horizontal) {
+        // verifica se a faixa escolhida ta livre antes de colocar o navio
         for (int i = 0; i < tamanho; i++) {
             int linhaDestino = horizontal ? linha : linha + i;
             int colunaDestino = horizontal ? coluna + i : coluna;
@@ -165,12 +174,14 @@ public class BatalhaNaval {
     }
 
     private static void mostrarEstatisticasRodada(int tentativas, int acertos, int naviosAfundados) {
+        // mostra infos rapidas da rodada pra acompanhar desempenho
         double taxa = tentativas == 0 ? 0.0 : ((double) acertos / tentativas) * 100.0;
         int numeroRodada = tentativas + 1;
         System.out.printf("Tentativa %d/30 | Acertos: %d | Taxa: %.2f%% | Navios afundados: %d%n", numeroRodada, acertos, taxa, naviosAfundados);
     }
 
     private static void exibirTabuleiro(char[][] tabuleiro) {
+        // imprime o tabuleiro que o jogador enxerga
         System.out.println("  0 1 2 3 4 5 6 7");
         for (int i = 0; i < tabuleiro.length; i++) {
             System.out.print(i + " ");
@@ -185,6 +196,7 @@ public class BatalhaNaval {
     }
 
     private static int lerCoordenada(Scanner scanner, String mensagem) {
+        // fica insistindo ate receber uma coordenada valida
         System.out.print(mensagem);
         while (!scanner.hasNextInt()) {
             System.out.print("Entrada inválida. Digite um número entre 0 e 7: ");
@@ -211,6 +223,7 @@ public class BatalhaNaval {
     }
 
     private static void exibirResumoFinal(int tentativas, int acertos, int erros, int naviosAfundados, int totalNavios, char[] tiposNavio, int[] celulasRestantes, boolean vitoria, char[][] tabuleiroVisivel, char[][] tabuleiroNavios) {
+        // calcula pontuacao e faz um geralzao do que rolou na partida
         int pontosAcertos = acertos * 10;
         int pontosNavios = naviosAfundados * 50;
         int penalidadeErros = erros * -2;
@@ -264,6 +277,7 @@ public class BatalhaNaval {
     }
 
     private static int contarNaviosAfundadosPorTipo(char tipo, char[] tiposNavio, int[] celulasRestantes) {
+        // confere quantos navios de um tipo chegaram a zero celulas
         int total = 0;
         for (int i = 0; i < tiposNavio.length; i++) {
             if (tiposNavio[i] == tipo && celulasRestantes[i] == 0) {
@@ -274,6 +288,7 @@ public class BatalhaNaval {
     }
 
     private static void exibirTabuleiroFinal(char[][] tabuleiroVisivel, char[][] tabuleiroNavios) {
+        // revela onde estavam os navios no fim da partida
         System.out.println("  0 1 2 3 4 5 6 7");
         for (int i = 0; i < tabuleiroVisivel.length; i++) {
             System.out.print(i + " ");
