@@ -21,6 +21,13 @@ public class BatalhaNaval {
 
         posicionarTodosNavios(tabuleiroNavios, idsNavios, tiposNavio, tamanhosNavio, random);
 
+        boolean hackAtivo = perguntarHack(scanner);
+        if (hackAtivo) {
+            System.out.println("HACK ATIVADO! Tabuleiro do inimigo:");
+            exibirTabuleiroHack(tabuleiroNavios);
+            System.out.println();
+        }
+
         int tentativas = 0;
         int acertos = 0;
         int erros = 0;
@@ -205,6 +212,23 @@ public class BatalhaNaval {
         return scanner.nextInt();
     }
 
+    private static boolean perguntarHack(Scanner scanner) {
+        // pergunta se o jogador quer ver o tabuleiro inimigo logo no inicio
+        while (true) {
+            System.out.print("Quer jogar com hack? (s/n): ");
+            String resposta = scanner.next().trim().toLowerCase();
+
+            if (resposta.equals("s")) {
+                return true;
+            }
+            if (resposta.equals("n")) {
+                return false;
+            }
+
+            System.out.println("Resposta invalida. Digite 's' para sim ou 'n' para nao.");
+        }
+    }
+
     private static boolean coordenadaValida(int linha, int coluna) {
         return linha >= 0 && linha < 8 && coluna >= 0 && coluna < 8;
     }
@@ -303,6 +327,21 @@ public class BatalhaNaval {
                 }
 
                 if (j < tabuleiroVisivel[i].length - 1) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    private static void exibirTabuleiroHack(char[][] tabuleiroNavios) {
+        // mostra o tabuleiro inimigo no modo hack pra facilitar a vida
+        System.out.println("  0 1 2 3 4 5 6 7");
+        for (int i = 0; i < tabuleiroNavios.length; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < tabuleiroNavios[i].length; j++) {
+                System.out.print(tabuleiroNavios[i][j]);
+                if (j < tabuleiroNavios[i].length - 1) {
                     System.out.print(" ");
                 }
             }
